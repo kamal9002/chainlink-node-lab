@@ -2,7 +2,7 @@ Chainlink Node Incident Response Runbook
 
 **Version:** 1.0
 
-**Last Updated:** 2025-10-25
+**Last Updated:** 2025-10-28
 
 **Maintained by:** DevOps / Chainlink Reliability Team
 
@@ -14,9 +14,6 @@ This runbook defines the standard response procedures for **Chainlink node failu
 
 ## 1. Chainlink Node & PostgreSQL Health Checks Are “Healthy,” But UI Is Unresponsive
 
-### **Symtoms**
-  - The Chainlink Operator UI is currently inaccessible to users.
-
 ### **Detection**
   - Check Node Exporter metrics:
     - CPU, memory, disk usage
@@ -25,7 +22,9 @@ This runbook defines the standard response procedures for **Chainlink node failu
     - node_network_transmit_bytes_total / _receive_bytes_total
     - Inspect the Reason if any failed containers
 
-          ```docker container inspect <chainlink_container_name>/<Failed_container_name> ```
+      ``` 
+        docker container inspect <chainlink_container_name>/<Failed_container_name> 
+      ```
 
       - Check DB Query Health
 
@@ -43,9 +42,9 @@ This runbook defines the standard response procedures for **Chainlink node failu
 
       - Test API Responsiveness (Bypass UI)
 
-            ```curl -s -o /dev/null -w "%{http_code}\n" http://localhost:6688/v2/jobs```
+         ```curl -s -o /dev/null -w "%{http_code}\n" http://localhost:6688/v2/jobs```
 
-          `401` means “reachable but unauthorized,” so the node is alive.
+        `401` means __reachable but unauthorized__,so the node is alive.
 
       - Check Resource Usage for all containers 
 
@@ -67,7 +66,7 @@ This runbook defines the standard response procedures for **Chainlink node failu
   - Clear unused logs, enlarge DB volume
   - Restart the Node Process
 
-        ```docker compose restart  restart <chainlink_db>```
+    ```docker compose restart  restart <chainlink_db>```
 
   - Wait 1–2 minutes and to Confirm container is running
 
@@ -81,15 +80,6 @@ This runbook defines the standard response procedures for **Chainlink node failu
 
   - verify and monitor stability
 
-    | Metric                              | Expected Behavior           |
-    | ----------------------------------- | --------------------------- |
-    | `process_up{job="chainlink"}`       | = 1 (node is alive)         |
-    | `process_cpu_seconds_total`         | >0 and increasing           |
-    | `node_memory_MemAvailable_bytes`    | Stable, not near exhaustion |
-    | `node_filesystem_avail_bytes`       | >10% free                   |
-    | `node_network_transmit_bytes_total` | Active traffic resumed      |
-
-
 ### **Post-Incident Review**
    - Record the Root Cause Analysis, summarize the resolution and lessons learned, and outline the associated action items.
 
@@ -99,16 +89,15 @@ This runbook defines the standard response procedures for **Chainlink node failu
 ### **Detection**
   - Node cannot fetch blockchain data (e.g., jobs fail, balance cannot be read).
   - Chainlink node operations (job runs, data feeds, transactions) may fail or be delayed due to lack of blockchain connectivity.
-  - Confirm the root cause — is it the Chainlink node, network, or the QuickNode RPC endpoint?
 
-  Look for:
+    Look for:
     - RPC timeout or network unreachable
 
   ```
     docker container logs <chainlink_container_name> 2>&1 | grep -E "eth_call timeout|connection refused|context deadline exceeded" | tail -n 50
 
   ```
-  - Validate QuickNode Status --> https://status.quicknode.com/
+   - Validate QuickNode Status --> https://status.quicknode.com/
 
  ### **Mitigation & Resolution**
   - Switch to Backup RPC Endpoint  If available (e.g., Alchemy, Infura, or local Geth node) and restart the container 

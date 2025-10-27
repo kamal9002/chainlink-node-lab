@@ -1,4 +1,4 @@
-# 1. Deploying a Chainlink Node , Configuring Monitoring Tools and Incidents Handling
+# 1. Chainlink Node Deployment: Setup, Monitoring, and Incident Response
 
 ## Table of Contents
 - [Description](#description)
@@ -25,19 +25,19 @@
 #### Step 1: Clone Chainlink Repository
 
 ``` yaml
-git clone https://github.com/smartcontractkit/chainlink.git
-cd chainlink
+git clone https://github.com/kamal9002/chainlink-node-lab.git
+cd chainlink-node-lab
 ```
 
 #### Step 2: Enviroment Setup
 
 Set up credentails & Environment Variables:
- - Replace <YOUR_QUICKNODE_ID> in config.toml and  <PASSWORD> with your actual values in following files:
+ - Replace  <YOUR_QUICKNODE_ID>  in config.toml and  <PASSWORD> with your actual values in following files:
     - docker-compose-yml
     - secret.toml
 
-    <YOUR_QUICKNODE_ID> - update httpurl& wssurl for Ethereum Test provider  from (QuickNode, Alchemy,etc)
-    Replace the placeholders with your desired email and password `.api` for UI credentails to login  operator UI
+    <YOUR_QUICKNODE_ID> - update httpurl & wssurl for Ethereum Test provider  from (QuickNode, Alchemy,etc)
+    Replace the placeholders with your desired email and password `.api` for UI credentails to login in operator
 
 #### Step 3: Deploying the apps
 
@@ -60,9 +60,9 @@ Ensure you are in the `docker-compose.yml` directory after updating environment 
     docker compose ps   # check all the containers are healthy and up
 ```
 
-once the all the containers are healthy , access the operator UI and grafana in browser 
+once  all the containers are healthy , access the operator UI and grafana in browser 
  - [Operator UI](http://localhost:6688/)
- - [grafana](http://localhost:3000/)
+
 
 
 ### Preparing Your Chainlink Node
@@ -75,14 +75,18 @@ once the all the containers are healthy , access the operator UI and grafana in 
 ### Log collection and Analysis
  - This stack is pre-configured with log aggregation and collector.Once Promtail pushes logs to Loki, you can query and visualize them in grafana:
     Example query:
-        Explore tab to verify the correct label name for your Chainlink logs, e.g., job="chainlink" or app="chainlink"
+        Explore tab to verify the correct label name for your Chainlink logs, e.g., job="chainlink-node" (labels according to promtail config)
     
     ![Logs](images/log-analysis.png)
 
 ### Monitoring Tools
  - This stack is pre-configured with infrastructure monitoring . It sets up **Prometheus** for data collection, the **Node Exporter** to gather system metrics from the host, and **Grafana** for visualization, with the datasource and dashboard automatically provisioned on startup.
+    - [grafana ui](http://localhost:3000/) 
+    - [Prometheus ui](http://localhost:9090/)
+  
+    - Node Exporter Dashboard for system metrics
 
-  ![dashboard](images/dashboard.png)
+      ![dashboard](images/dashboard.png)
 
 ### Handling Incidents
  - step-by-step instructions on managing and resolving incidents, refer to the [playbook-incident](docs/Incident-Response.md)
