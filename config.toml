@@ -1,0 +1,22 @@
+[Log]
+Level = 'info'
+JSONConsole = true
+
+[Log.File]
+Dir = '/var/log/chainlink'
+
+[WebServer]
+AllowOrigins = '*'
+SecureCookies = false
+
+[WebServer.TLS]
+HTTPSPort = 0
+
+[[EVM]]
+ChainID = '11155111'
+
+[[EVM.Nodes]]
+Name = 'Sepolia'
+WSURL = 'wss://<YOUR_QUICKNODE_ID>'
+HTTPURL = 'https://<YOUR_QUICKNODE_ID>'
+
