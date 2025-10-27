@@ -32,14 +32,14 @@ cd chainlink-node-lab
 #### Step 2: Enviroment Setup
 
 Set up credentails & Environment Variables:
- - Replace  <YOUR_QUICKNODE_ID>  in config.toml and  <PASSWORD> with your actual values in following files:
+ - Replace __<YOUR_QUICKNODE_ID>__ in config.toml and __PASSWORD__ with your actual values in following files:
     - docker-compose-yml
     - secret.toml
 
-    <YOUR_QUICKNODE_ID> - update httpurl & wssurl for Ethereum Test provider  from (QuickNode, Alchemy,etc)
+    __<YOUR_QUICKNODE_ID>__ - update httpurl & wssurl for Ethereum Test provider  from (QuickNode, Alchemy,etc)
     Replace the placeholders with your desired email and password `.api` for UI credentails to login in operator
 
-#### Step 3: Deploying the apps
+#### Step 3: Deploying the Stack
 
 ##### Stack Overview
 
