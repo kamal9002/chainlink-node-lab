@@ -1,4 +1,4 @@
-# 1. Chainlink Node Deployment: Setup, Monitoring, and Incident Response
+# Chainlink Node Deployment: Setup, Monitoring, and Incident Response
 
 ## Table of Contents
 - [Description](#description)
