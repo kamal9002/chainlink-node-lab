@@ -20,7 +20,8 @@ This runbook defines the standard response procedures for  **Chainlink node fail
     - High load or memory exhaustion may indicate node unresponsiveness
     - node_filesystem_avail_bytes
     - node_network_transmit_bytes_total / _receive_bytes_total
-    - Check DB Query Health
+  
+  - Check DB Query Health
 
       ```
         docker exec -it <chainlink_postgres_name>  psql -U chainlink -d chainlink -c \
@@ -34,27 +35,27 @@ This runbook defines the standard response procedures for  **Chainlink node fail
       (1 row)
       ````
 
-    - Check for Log Flooding and Look for repeating errors like pq: canceling statement due to statement timeout , pipeline execution timeout
+  - Check for Log Flooding and Look for repeating errors like pq: canceling statement due to statement timeout , pipeline execution timeout
 
         ```docker container logs <chainlink_container_name>  | tail -n 100```
 
-    - Test API Responsiveness (Bypass UI)
+  - Test API Responsiveness (Bypass UI)
 
       ```curl -s -o /dev/null -w "%{http_code}\n" http://localhost:6688/v2/jobs```
 
         `401` means __reachable but unauthorized__,so the node is alive.
 
-    - Check Resource Usage for all containers 
+  - Check Resource Usage for all containers 
 
-        ```docker container stats <chainlink_container_name>  <chainlink_postgres_name>```
+      ```docker container stats <chainlink_container_name>  <chainlink_postgres_name>```
       
-    - ensure the connection between db and app
+  - ensure the connection between db and app
 
-      ```
-        docker container exec -it chainlink_app /bin/bash
-        curl chainlink_v2-postgres:5432
-        curl: (52) Empty reply from server
-      ```
+    ```
+      docker container exec -it chainlink_app /bin/bash
+      curl chainlink_v2-postgres:5432
+      curl: (52) Empty reply from server
+    ```
       `curl: (52)` successfully reached the hostname chainlink_v2-postgres on port 5432. The connection was established, but PostgreSQL closed it immediately, since it’s a binary protocol, not HTTP
 
 ### **Mitigation & Resolution**
