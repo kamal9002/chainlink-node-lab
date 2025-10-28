@@ -37,13 +37,13 @@ This runbook defines the standard response procedures for  **Chainlink node fail
 
   - Check for Log Flooding and Look for repeating errors like pq: canceling statement due to statement timeout , pipeline execution timeout
 
-        ```docker container logs <chainlink_container_name>  | tail -n 100```
+     ```docker container logs <chainlink_container_name>  | tail -n 100```
 
   - Test API Responsiveness (Bypass UI)
 
       ```curl -s -o /dev/null -w "%{http_code}\n" http://localhost:6688/v2/jobs```
 
-        `401` means __reachable but unauthorized__,so the node is alive.
+      `401` means __reachable but unauthorized__,so the node is alive.
 
   - Check Resource Usage for all containers 
 
@@ -65,14 +65,12 @@ This runbook defines the standard response procedures for  **Chainlink node fail
   - Clear unused logs, enlarge DB volume
   - Restart the Node Process
 
-    ```docker compose restart  restart <chainlink_db>```
-
-  - Wait 1–2 minutes and to Confirm container is running
-
-     ```
+    ```
+        docker compose restart  restart <chainlink_db>
+        # Wait 1–2 minutes and to Confirm container is running
         docker container logs -f <chainlink_db> 
         sleep 10
-        docker compose restart <chainlink>
+        docker compose restart <chainlink_app>    
      ```
 
   - Check Chainlink UI (port `6688`) is  responsive and normal
