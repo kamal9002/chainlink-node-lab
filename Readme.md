@@ -26,6 +26,7 @@
 ``` yaml
 git clone https://github.com/kamal9002/chainlink-node-lab.git
 cd chainlink-node-lab
+git checkout baseline_v1   # the branch where actual code resides
 ```
 
 #### Step 2: Enviroment Setup
@@ -36,6 +37,7 @@ Set up credentails & Environment Variables:
     - secret.toml
 
     __<YOUR_QUICKNODE_ID>__ - update httpurl & wssurl for Ethereum Test provider  from (QuickNode, Alchemy,etc)
+  
     Replace the placeholders with your desired email and password `.api` for UI credentails to login in operator
 
 #### Step 3: Deploying the Stack
