@@ -9,7 +9,7 @@
 - [Handling Incidents](#handling-incidents)
 
 ### Description
-- Setup, preparing and monitoring a Chainlink node involves several steps from the initial deployment to ensuring that the system is able process jobs efficiently. Below are the instructions on setting up the node, preparing the node, configuring monitoring tools and handling incidents.
+- Setup, preparing and monitoring a Chainlink node involves several steps from the initial deployment to ensuring that the system is able to process the jobs efficiently. Below are the instructions on setting up the node, preparing the node, configuring monitoring tools and handling incidents.
 
 ### Assumptions:
 - You are using a Linux environment (Ubuntu or similar) for the deployment.
