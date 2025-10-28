@@ -1,4 +1,4 @@
-# Chainlink Node Deployment: Setup, Monitoring, and Incident Response
+# Chainlink Node Deployment: Setup, Monitoring and Incident Response
 
 ## Table of Contents
 - [Description](#description)
@@ -9,13 +9,12 @@
 - [Handling Incidents](#handling-incidents)
 
 ### Description
-- Setting up ,preparing and  monitoring a Chainlink node involves several steps from the initial deployment to ensuring that the system is able process jobs efficiently. Below are the instructions on setting up the node, preparing the node, configuring monitoring tools and handling incidents.
+- Setup, preparing and monitoring a Chainlink node involves several steps from the initial deployment to ensuring that the system is able process jobs efficiently. Below are the instructions on setting up the node, preparing the node, configuring monitoring tools and handling incidents.
 
 ### Assumptions:
 - You are using a Linux environment (Ubuntu or similar) for the deployment.
 - You have Docker and Docker Compose installed.
 - You have access to an Ethereum node (e.g., via QuickNode,Infura or your own Ethereum client).
-- PostgreSQL is available for the Chainlink node database.
 - The goal is to run a Chainlink node 
 
 ---
@@ -53,34 +52,38 @@ Set up credentails & Environment Variables:
 | **prometheus**              | Metrics collection system; scrapes Node Exporter & Chainlink metrics | `9090` |
 | **grafana**                 | Visualization & alerting platform; connects to Prometheus & Loki     | `3000` |
 
-Ensure you are in the `docker-compose.yml` directory after updating environment variables and credentials.And execute the commands:-
+
+After updating environment variables and credentials, navigate to the `docker-compose.yml` directory and run the commands.
                  
 ```yaml
-    docker compose up -d  # Bring up the Docker Compose stack 
+    docker compose up -d  # Bring up the stack 
     docker compose ps   # check all the containers are healthy and up
 ```
+  ![Docker](images/docker-status.png)
 
-once  all the containers are healthy , access the operator UI and grafana in browser 
+once  all the containers are healthy , access the operator UI in the browser 
  - [Operator UI](http://localhost:6688/)
 
 
 
 ### Preparing Your Chainlink Node
- - Refer to the following to prepare chainlink node for performing smart contract operations
+ - Deploying smart contracts and executing job requests involve multiple steps, all of which are detailed in the Chainlink documentation
      - [Fulfilling Requests Guide](https://docs.chain.link/chainlink-nodes/v1/fulfilling-requests)
 
- - once afte completion of the above setup success job completion can be viewed from Node Operators UI :
+ - After completing the above setup, you can verify successful job execution from the Node Operator’s UI
     ![Jobs](images/job_success.png)
 
 ### Log collection and Analysis
- - This stack is pre-configured with log aggregation and collector.Once Promtail pushes logs to Loki, you can query and visualize them in grafana:
-    Example query:
-        Explore tab to verify the correct label name for your Chainlink logs, e.g., job="chainlink-node" (labels according to promtail config)
+ - This stack is pre-configured with log aggregation and collector.Once Promtail pushes logs to Loki, you can query and visualize them in grafana
+   - Example query:
+       Go to _Explore_ in Grafana, select _DS_LOKI_, and run the query **job="chainlink-node"** _(labels according to promtail config)_
+
     
     ![Logs](images/log-analysis.png)
 
 ### Monitoring Tools
- - This stack is pre-configured with infrastructure monitoring . It sets up **Prometheus** for data collection, the **Node Exporter** to gather system metrics from the host, and **Grafana** for visualization, with the datasource and dashboard automatically provisioned on startup.
+ - This stack is pre-configured with infrastructure monitoring. It sets up **Prometheus**, the **Node Exporter** to gather system metrics from the host, and **Grafana** for visualization, with the datasource and dashboard automatically provisioned on startup.
+ 
     - [grafana ui](http://localhost:3000/) 
     - [Prometheus ui](http://localhost:9090/)
   

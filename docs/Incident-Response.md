@@ -9,7 +9,7 @@ Chainlink Node Incident Response Runbook
 
 ## Overview
 
-This runbook defines the standard response procedures for **Chainlink node failures**
+This runbook defines the standard response procedures for  **Chainlink node failures**
 
 
 ## 1. Chainlink Node & PostgreSQL Health Checks Are “Healthy,” But UI Is Unresponsive
@@ -20,44 +20,42 @@ This runbook defines the standard response procedures for **Chainlink node failu
     - High load or memory exhaustion may indicate node unresponsiveness
     - node_filesystem_avail_bytes
     - node_network_transmit_bytes_total / _receive_bytes_total
-    - Inspect the Reason if any failed containers
-
-      ``` 
-        docker container inspect <chainlink_container_name>/<Failed_container_name> 
-      ```
-
-      - Check DB Query Health
+    - Check DB Query Health
 
       ```
         docker exec -it <chainlink_postgres_name>  psql -U chainlink -d chainlink -c \
         "SELECT pid, state, query, now() - query_start AS runtime FROM pg_stat_activity WHERE state!='idle' ORDER BY runtime DESC LIMIT 5;"
-        pid | state  |                                                               query                                                               | runtime  
-        -----+--------+-----------------------------------------------------------------------------------------------------------------------------------+----------
-          96 | active | SELECT pid, state, query, now() - query_start AS runtime FROM pg_stat_activity WHERE state!='idle' ORDER BY runtime DESC LIMIT 5; | 00:00:00
-        (1 row)
       ```
-      - Check for Log Flooding and Look for repeating errors like pq: canceling statement due to statement timeout , pipeline execution timeout
+      It should return the state and pid details 
+      ```
+       pid | state  |                                                               query                                                               | runtime  
+      -----+--------+-----------------------------------------------------------------------------------------------------------------------------------+----------
+      252 | active | SELECT pid, state, query, now() - query_start AS runtime FROM pg_stat_activity WHERE state!='idle' ORDER BY runtime DESC LIMIT 5; | 00:00:00
+      (1 row)
+      ````
 
-           ```docker container logs <chainlink_container_name>  | tail -n 100```
+    - Check for Log Flooding and Look for repeating errors like pq: canceling statement due to statement timeout , pipeline execution timeout
 
-      - Test API Responsiveness (Bypass UI)
+        ```docker container logs <chainlink_container_name>  | tail -n 100```
 
-         ```curl -s -o /dev/null -w "%{http_code}\n" http://localhost:6688/v2/jobs```
+    - Test API Responsiveness (Bypass UI)
+
+      ```curl -s -o /dev/null -w "%{http_code}\n" http://localhost:6688/v2/jobs```
 
         `401` means __reachable but unauthorized__,so the node is alive.
 
-      - Check Resource Usage for all containers 
+    - Check Resource Usage for all containers 
 
-          ```docker container stats <chainlink_container_name>  <chainlink_postgres_name>```
+        ```docker container stats <chainlink_container_name>  <chainlink_postgres_name>```
       
-      - ensure the connection between db and app
+    - ensure the connection between db and app
 
-          ```
-            docker container exec -it chainlink_app /bin/bash
-            curl chainlink_v2-postgres:5432
-            curl: (52) Empty reply from server
-          ```
-          `curl: (52)` successfully reached the hostname chainlink_v2-postgres on port 5432. The connection was established, but PostgreSQL closed it immediately, since it’s a binary protocol, not HTTP
+      ```
+        docker container exec -it chainlink_app /bin/bash
+        curl chainlink_v2-postgres:5432
+        curl: (52) Empty reply from server
+      ```
+      `curl: (52)` successfully reached the hostname chainlink_v2-postgres on port 5432. The connection was established, but PostgreSQL closed it immediately, since it’s a binary protocol, not HTTP
 
 ### **Mitigation & Resolution**
 
