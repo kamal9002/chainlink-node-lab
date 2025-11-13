@@ -12,7 +12,7 @@ straightforward as possible.
  
  ### Added
 
-## [1.0.0] - 2021-10-28
+## [1.0.0] - 2025-10-28
   
  - Added chainnode 
  
